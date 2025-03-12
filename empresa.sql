@@ -11,7 +11,7 @@ CREATE TABLE if not exists TCENTR(
 
 CREATE TABLE if not exists TEMPLE(
 	numem int not null unique,
-    numde int not null,
+    numde int,
     extel int not null,
     fecna datetime not null,
     fecin datetime not null,
@@ -53,7 +53,8 @@ values(100, 10, 260, "P", 720000, null, "DIRECCION GENERAL"),
 	(130, 10, 310, "P", 12000, 100, "FINANZAS");
     
 insert into TEMPLE(numem, numde, extel, fecna, fecin, salar, comis, numhi, nomem)
-values(110, 121, 350, "2029/11/10", "1950/02/15", 1800, null, 3, "PONS, CESAR"),
+values
+	(110, 121, 350, "2029/11/10", "1950/02/15", 1800, null, 3, "PONS, CESAR"),
 	(120, 112, 840, "1935/06/09", "1968/10/01", 2100, 1100, 1, "LASA, MARIO"),
     (130, 112, 810, "1945/09/09", "1969/02/01", 2900, null, 2, "TEROL, LUCIANO"),
     (140, 121, 340, "1948/03/10", "1968/03/14", 1800, null, 0, "PEREZ, JULIO"),
@@ -72,6 +73,19 @@ values(110, 121, 350, "2029/11/10", "1950/02/15", 1800, null, 3, "PONS, CESAR"),
     (320, 121, 600, "1950/10/28", "1978/03/15", 2800, 900, 2, "SANZ, CORNELIO"),
     (330, 122, 610, "1949/04/13", "1968/04/10", 2300, null, 1, "DIEZ, AMELIA"),
     (350, 122, 630, "1949/04/13", "1968/04/10", 2500, null, 1, "CAMPS, AURELIO"),
-    (360, 111, 750, "1958/10/29", "1978/10/10", 2500, 1000, 2, "LARA, DORINDA");
-
-alter table TDEPTO add foreign key (direc) references TEMPLE(numem);
+    (360, 111, 750, "1958/10/29", "1978/10/10", 2500, 1000, 2, "LARA, DORINDA"),
+    (370, 121, 360, "1967/06/22", "1987/01/20", 1900, NULL, 1, "RUIZ, FABIOLA"),
+    (380, 112, 880, "1968/03/30", "1988/01/01", 1800, NULL, 0, "MARTIN, MICAELA"),
+    (390, 110, 500, "1966/09/12", "1986/10/08", 2150, NULL, 1, "MORAN, CARMEN"),
+    (400, 111, 780, "1969/08/18", "1987/11/11", 1850, NULL, 0, "LARA, LUCRECIA"),
+    (410, 112, 660, "1968/07/14", "1986/10/13", 1750, NULL, 0, "MUÑOZ, AZUCENA"),
+    (420, 130, 450, "1966/10/22", "1988/11/19", 4000, NULL, 0, "FIERRO, CLAUDIA"),
+    (430, 112, 650, "1967/02/20", "1988/11/19", 2100, NULL, 1, "MORA, VALERIANA"),
+    (440, 111, 760, "1966/09/26", "1986/02/28", 2100, 1000, 0, "DURAN, LIVIA"),
+    (450, 112, 880, "1966/10/21", "1986/02/28", 2100, 1000, 0, "PEREZ, SABINA"),
+    (480, 111, 760, "1965/04/04", "1986/02/28", 2100, NULL, 1, "PINO, DIANA"),
+    (490, 112, 880, "1964/06/06", "1988/01/01", 1800, NULL, 0, "TORRES, HORACIO"),
+    (500, 111, 750, "1965/10/08", "1987/01/01", 2000, NULL, 0, "VAZQUEZ, HONORIA"),
+    (510, 110, 550, "1966/05/04", "1996/11/01", 2000, NULL, 1, "CAMPOS, ROMULO"),
+	(511, null, 550, "1966/05/04", "1996/11/01", 2000, NULL, 1, "MANUEL, ANEL"),
+    (550, 111, 780, "1970/01/10", "1988/01/21", 1000, 1200, 0, "SANTOS, SANCHO");
