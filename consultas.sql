@@ -273,4 +273,71 @@ select nomde, nomem, (salar+comis) as "salartotal"
     inner join tdepto
     on temple.numde = tdepto.numde
     where (salar+comis) > (1000+(select min(salar) from temple))
-    order by temple.numde
+    order by temple.numde;
+    
+#9
+select numce
+	from tcentr
+    where senhas like "%alcala%";
+
+select nomem 
+	from temple
+    where numde=122 and salar>(select avg(salar) from temple where numde =122) and exists(select * from tdepto where numde = 122 and numce = (select numce from tcentr where senhas like "%alcala%"))
+	order by nomem;
+	
+
+#11
+select nomde
+	from tdepto
+    where depde in (select numde from tdepto where presu < 50000)
+    order by nomde;
+
+#12
+select count(numem)/count(distinct extel)
+	from tdepto
+    inner join temple
+    on temple.numde = tdepto.numde
+    where presu > 60000
+    group by extel;
+
+#13
+select nomem
+	from temple
+    inner join tdepto on temple.numde = tdepto.numde
+    inner join tcentr on tdepto.numce = tcentr.numce
+    where nomem like "G%" and senhas like "%Alcala%"
+    order by nomem;
+
+#14 
+select nomem
+	from temple
+    inner join tdepto on tdepto.direc = temple.numem
+    where tidir = "F"
+    order by nomem;
+
+#15
+select temple.numde, extel, nomde
+	from temple
+    inner join tdepto
+    on temple.numde = tdepto.numde
+    where nomde not like "%direccion%" and nomde not like "%sector%"
+    order by numde, extel;
+
+#16
+select nomem, numem, (salar*5)/100 as "gratificacion", tidir
+	from temple 
+    inner join tdepto
+    on temple.numde = tdepto.numde
+    where temple.numem = tdepto.direc and tidir = 'F'
+    order by nomem;
+
+select nomem, numem, (salar*5)/100 as "gratificacion"
+from temple
+where numem in (select direc from tdepto where tidir = 'F')
+order by nomem;
+
+#17
+select numem from temple where nomem like 'perez, marcos'
+
+
+
