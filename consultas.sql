@@ -284,7 +284,16 @@ select nomem
 	from temple
     where numde=122 and salar>(select avg(salar) from temple where numde =122) and exists(select * from tdepto where numde = 122 and numce = (select numce from tcentr where senhas like "%alcala%"))
 	order by nomem;
-	
+
+#10
+select nomde, nomce, max(salar)
+	from temple
+    inner join tdepto on temple.numde = tdepto.numde
+    inner join tcentr on tdepto.numce = tcentr.numce
+    where presu < 60000
+    group by nomde, nomce
+    having max(salar) > 2000
+    order by nomde;
 
 #11
 select nomde
@@ -327,8 +336,8 @@ select temple.numde, extel, nomde
 select nomem, numem, (salar*5)/100 as "gratificacion", tidir
 	from temple 
     inner join tdepto
-    on temple.numde = tdepto.numde
-    where temple.numem = tdepto.direc and tidir = 'F'
+    on temple.numem = tdepto.direc
+    where tidir = 'F'
     order by nomem;
 
 select nomem, numem, (salar*5)/100 as "gratificacion"
@@ -337,7 +346,176 @@ where numem in (select direc from tdepto where tidir = 'F')
 order by nomem;
 
 #17
-select numem from temple where nomem like 'perez, marcos'
+select nomem 
+	from temple
+    inner join tdepto 
+    on temple.numde = tdepto.numde
+    where direc in (select numde from temple where nomem like '%perez, marcos%') and tidir = 'p' or tidir = 'f'
+    order by nomem;
 
+#18
+select nomem, temple.numde, count(numem)
+	from temple
+    inner join tdepto
+    on temple.numem = tdepto.direc
+    where tdepto.numde in (select depde from tdepto where depde is not null)
+    group by numem
+    order by nomem;
 
+select jefes.nomem, count(empleados.numem)
+	from temple jefes, temple empleados, tdepto departamentos, tdepto dependientes
+    where dependientes.depde = departamentos.numde
+    and dependientes.depde is not null
+    and empleados.numde = dependientes.numde
+    and jefes.numem = departamentos.direc
+    group by jefes.nomem
+    order by jefes.nomem;
+
+select jefes.nomem, count(empleados.numem)
+	from temple jefes
+    inner join tdepto departamentos on jefes.numem = departamentos.direc
+    inner join tdepto dependientes on departamentos.numde = dependientes.depde and dependientes.depde is not null
+    inner join temple empleados on empleados.numde = dependientes.numde 
+    group by jefes.numem
+    order by jefes.nomem;
+
+# EJERCICIOS DE AGREGACIÓN Y AGRUPAMIENTO
+
+#1
+select max(salar)
+	from temple
+    where numde = 100;
+
+#2
+select nomem, salar
+	from temple
+    where salar > (select max(salar)*0.4 from temple);
+
+#3
+select count(numem)
+	from temple;
+
+#4
+select count(numem), count(distinct extel)
+	from temple
+    where numde = 112;
+
+#5
+select count(numem)
+	from temple
+	where fecna > '1974-01-01';
+
+#21
+select count(numem) as 'numero de empleados'
+	from temple 
+    where numde = 100 or numde = 110;	
+
+#22
+select numde, numhi, count(numem) as 'numero de empleados'
+	from temple 
+    group by numde, numhi
+    having numde = 100 or numde = 110;
+
+#23
+select numde, count(numem), sum(salar), sum(comis), sum(numhi)
+	from temple
+    where comis is not null
+    group by numde
+    having numde in (select numde from temple where salar>4000);
+
+#24
+select numhi, avg((salar+comis)/numhi)
+from temple
+where numhi > 0 and comis is not null and salar is not null
+group by numhi;
+
+#28
+select numde, max(extel)
+	from temple
+    group by numde;
+
+#29
+select extel, count(distinct numde)
+	from temple
+    group by extel;
+
+#30
+select count(numem)/count(distinct extel), numde
+	from temple 
+    group by numde
+    having numde in (select numde from temple where comis > 0);
+
+#6
+select count(numem), count(comis), sum(comis), avg(comis)
+	from temple
+    where numde = 112;
+
+#7
+select count(distinct comis), avg(distinct comis)
+	from temple;
+
+#8
+select avg(numhi)
+	from temple
+    where numde = 112;
+
+#9
+select numde, presu, (select avg(presu) from tdepto) as 'media de comisiones'
+	from tdepto
+    where depde = 100;
+
+#13
+select count(numde), avg(presu)
+from tdepto;
+
+#14
+select count(numde), avg(presu)
+from tdepto
+where tidir != 'P';
+
+#15
+select nomem, (salar+comis) as 'salario total'
+	from temple
+    where (salar+comis)>(select min(salar)+3000 from temple)
+    order by numem;
+
+#16
+select (sum(salar)+sum(comis))*14 as 'masa salarial anual'
+	from temple;
+
+#17
+select avg(salar) as 'salario medio'
+	from temple
+    where salar < (select min(salar)+(min(salar)*0.2) from temple where numhi > 0 and (salar/numhi) > 1000);
+
+#18
+select max(salar)-min(salar) as 'diferencia'
+	from temple;
+
+#19
+select avg(presu)
+	from tdepto
+    where presu > (select avg(presu) from tdepto);
+
+#20
+select nomem, avg(numhi)
+	from temple
+    where numhi <= 2
+    group by nomem;
+
+#25
+select numde, avg(comis), (select avg(comis) from temple)
+	from temple
+    where comis > 0
+    group by numde;
+
+#26
+select extel, count(numem), avg(salar)
+	from temple
+    group by extel;
+
+#27
+select extel, numde, count(numem), avg(salar)
+	from temple
+    group by extel, numde
 
